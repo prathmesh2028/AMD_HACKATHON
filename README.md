@@ -52,16 +52,23 @@ curl -X POST http://localhost:5000/api/chat \
 
 ---
 
-## Deployment to Google Cloud Run (Dockerless)
-As requested, here is how you can deploy this backend seamlessly:
-1. Ensure you have the \`gcloud\` CLI installed and initialized.
-2. Ensure Firestore is natively linked if using the same GCP project.
-3. Run the following command from the \`backend/\` directory:
-    \`\`\`bash
-    gcloud run deploy nutriengine-backend \
-      --source . \
-      --platform managed \
-      --region us-central1 \
-      --allow-unauthenticated \
-      --set-env-vars="GEMINI_API_KEY=your_key_here"
-    \`\`\`
+## Deployment to Google Cloud Run (Docker Native)
+
+The repository has been configured with an optimized `Dockerfile` and `.dockerignore` to streamline deployments to GCP.
+
+### Prerequisites:
+1. Ensure the `gcloud` CLI is initialized on your machine.
+2. Link your GCP Project: `gcloud config set project [YOUR-PROJECT-ID]`
+
+### Command:
+Run the following from the root directory:
+\`\`\`bash
+gcloud run deploy nutriengine-ai \\
+  --source . \\
+  --platform managed \\
+  --region us-central1 \\
+  --allow-unauthenticated \\
+  --set-env-vars="GEMINI_API_KEY=your_key_here"
+\`\`\`
+
+> Cloud Build will detect the `Dockerfile` automatically, strictly ignore your local keys (via `.dockerignore`), and deploy a highly optimized `node:18-alpine` image to the cloud inside 60 seconds!
