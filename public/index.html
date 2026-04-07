@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nutrition Intelligence Engine</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="ph ph-brain logo-icon"></i>
+                <h2>NutriEngine <span class="badge">AI</span></h2>
+            </div>
+            
+            <div class="config-section">
+                <h3>User Profile</h3>
+                <div class="input-group">
+                    <label>Age</label>
+                    <input type="number" id="profile-age" value="28" placeholder="e.g. 28">
+                </div>
+                <div class="input-group">
+                    <label>Weight (kg)</label>
+                    <input type="number" id="profile-weight" value="75" placeholder="e.g. 75">
+                </div>
+                <div class="input-group">
+                    <label>Goal</label>
+                    <select id="profile-goal">
+                        <option value="fat loss">Fat Loss</option>
+                        <option value="muscle gain">Muscle Gain</option>
+                        <option value="maintenance">Maintenance</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Activity Level</label>
+                    <select id="profile-activity">
+                        <option value="Sedentary">Sedentary</option>
+                        <option value="Moderately Active" selected>Moderately Active</option>
+                        <option value="Highly Active">Highly Active</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="config-section">
+                <h3>Live Context</h3>
+                <div class="input-group">
+                    <label>Time</label>
+                    <input type="time" id="context-time" value="16:30">
+                </div>
+                <div class="input-group">
+                    <label>Last Meal</label>
+                    <input type="text" id="context-last-meal" value="1:00 PM (Lunch)" placeholder="e.g. 1:00 PM (Lunch)">
+                </div>
+                <div class="input-group">
+                    <label>Location</label>
+                    <input type="text" id="context-location" value="Office desk" placeholder="e.g. Home, Office">
+                </div>
+            </div>
+
+            <div class="config-section">
+                <h3>Live State</h3>
+                <div class="input-group">
+                    <label>Hunger Level</label>
+                    <select id="state-hunger">
+                        <option value="Starving">Starving</option>
+                        <option value="Moderate" selected>Moderate</option>
+                        <option value="Not Hungry">Not Hungry</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Energy Level</label>
+                    <select id="state-energy">
+                        <option value="High">High</option>
+                        <option value="Normal">Normal</option>
+                        <option value="Low" selected>Low/Crash</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="config-section">
+                <h3>User Behavior</h3>
+                <div class="input-group">
+                    <label>History Summary</label>
+                    <textarea id="behavior-history" rows="2" placeholder="e.g. Tends to snack on processed foods">Snacks on processed foods in evening. Low protein.</textarea>
+                </div>
+                <div class="input-group">
+                    <label>Recent Logs</label>
+                    <textarea id="behavior-recent" rows="2" placeholder="e.g. 2 cups of tea, biscuits">2 cups of tea with sugar, some biscuits</textarea>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="main-header">
+                <div class="header-titling">
+                    <h1>Intelligence Console</h1>
+                    <p>Real-world health optimization based on your live context.</p>
+                </div>
+                <div class="status-indicator">
+                    <span class="pulse"></span> Engine Online
+                </div>
+            </header>
+
+            <div class="interaction-area">
+                <div class="query-box">
+                    <div class="input-type-selector">
+                        <label>Input Type:</label>
+                        <div class="type-tabs" id="type-tabs">
+                            <button class="type-tab active" data-type="food_analysis"><i class="ph ph-hamburger"></i> Food</button>
+                            <button class="type-tab" data-type="image_analysis"><i class="ph ph-camera"></i> Image</button>
+                            <button class="type-tab" data-type="chat"><i class="ph ph-chat-centered-text"></i> Chat</button>
+                            <button class="type-tab" data-type="habit_analysis"><i class="ph ph-chart-bar"></i> Habit</button>
+                            <button class="type-tab" data-type="recommendation"><i class="ph ph-sparkle"></i> Action</button>
+                        </div>
+                    </div>
+
+                    <div class="input-container">
+                        <textarea id="user-input" rows="3" placeholder="Enter your food craving, question, or attach an image label here..."></textarea>
+                        
+                        <!-- Hidden by default until Image tab selected -->
+                        <div id="image-upload-wrapper" class="hidden" style="width:100%; border:1px dashed var(--border-color); border-radius:12px; padding:16px; background:rgba(0,0,0,0.2); display:flex; align-items:center; gap:12px;">
+                            <input type="file" id="image-upload" accept="image/png, image/jpeg, image/webp" style="flex:1; border:none; background:transparent;">
+                        </div>
+
+                        <button id="analyze-btn" class="primary-btn">
+                            <i class="ph ph-magic-wand"></i> Analyze
+                        </button>
+                    </div>
+                </div>
+
+                <div class="output-area">
+                    <div id="output-placeholder" class="placeholder">
+                        <i class="ph ph-robot"></i>
+                        <p>Awaiting input data. Specify your context and submit a query.</p>
+                    </div>
+                    <div id="loading-spinner" class="spinner-container hidden">
+                        <div class="spinner"></div>
+                        <p>Processing via Intelligence Engine...</p>
+                    </div>
+                    <div id="response-container" class="response-container hidden">
+                        <!-- Content gets injected here by app.js -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
