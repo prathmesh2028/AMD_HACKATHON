@@ -20,6 +20,18 @@
                 <i class="ph ph-brain logo-icon"></i>
                 <h2>NutriEngine <span class="badge">AI</span></h2>
             </div>
+
+            <!-- New Intelligence Summary Section -->
+            <div class="config-section intelligence-summary">
+                <div class="health-score-card">
+                    <span class="label">Live Health Score</span>
+                    <div id="live-health-score" class="score-value">--/100</div>
+                </div>
+                <div class="action-card">
+                    <span class="label">Next Best Action</span>
+                    <p id="live-next-action" class="action-text">Calculating...</p>
+                </div>
+            </div>
             
             <div class="config-section">
                 <h3>User Profile</h3>
@@ -86,14 +98,9 @@
             </div>
 
             <div class="config-section">
-                <h3>User Behavior</h3>
-                <div class="input-group">
-                    <label>History Summary</label>
-                    <textarea id="behavior-history" rows="2" placeholder="e.g. Tends to snack on processed foods">Snacks on processed foods in evening. Low protein.</textarea>
-                </div>
-                <div class="input-group">
-                    <label>Recent Logs</label>
-                    <textarea id="behavior-recent" rows="2" placeholder="e.g. 2 cups of tea, biscuits">2 cups of tea with sugar, some biscuits</textarea>
+                <h3>Live Insights</h3>
+                <div id="live-insights-list" class="insights-container">
+                    <p class="insight-item">No insights yet.</p>
                 </div>
             </div>
         </aside>

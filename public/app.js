@@ -12,6 +12,38 @@ document.addEventListener('DOMContentLoaded', () => {
     const responseContainer = document.getElementById('response-container');
     const imageUploadWrapper = document.getElementById('image-upload-wrapper');
     const imageUploadInput = document.getElementById('image-upload');
+    
+    // Quick Intel Elements
+    const liveHealthScore = document.getElementById('live-health-score');
+    const liveNextAction = document.getElementById('live-next-action');
+    const liveInsightsList = document.getElementById('live-insights-list');
+
+    // Load initial context
+    async function fetchContext() {
+        try {
+            const response = await fetch('/api/context/user123');
+            const result = await response.json();
+            
+            if (result.success) {
+                const { context } = result.data;
+                
+                // Update Sidebar Quick Intel
+                liveHealthScore.textContent = context.health_score.replace('Health Score: ', '');
+                liveNextAction.textContent = context.next_best_action;
+                
+                // Update Insights
+                if (context.insights && context.insights.length > 0) {
+                    liveInsightsList.innerHTML = context.insights.map(i => `<p class="insight-item">${i}</p>`).join('');
+                } else {
+                    liveInsightsList.innerHTML = '<p class="insight-item">No insights yet.</p>';
+                }
+            }
+        } catch (error) {
+            console.error('Failed to fetch context:', error);
+        }
+    }
+
+    fetchContext();
 
     // Tab Switching Logic
     typeTabs.forEach(tab => {
@@ -155,6 +187,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     <p style="margin-top: 8px;"><strong>Portion:</strong> ${data.smart_advice?.portion || 'N/A'}</p>
                     <p><strong>Better Alternative:</strong> ${data.smart_advice?.alternative || 'N/A'}</p>
                 </div>
+
+                ${data.why_suggestion ? `
+                <div class="verdict-box" style="margin-top: 12px; background: rgba(255,255,255,0.05); border-left-color: rgba(255,255,255,0.2);">
+                    <h4 style="color: rgba(255,255,255,0.6); font-size: 11px; text-transform: uppercase;">Why this suggestion?</h4>
+                    <p style="font-size: 13px; color: rgba(255,255,255,0.8);">${data.why_suggestion}</p>
+                </div>
+                ` : ''}
             `;
         } 
         else if (type === 'recommendation') {
@@ -187,6 +226,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     <h4><i class="ph ph-lightning"></i> Quick Hack</h4>
                     <p style="margin-top: 8px;">${data.quick_hack}</p>
                 </div>
+
+                ${data.why_suggestion ? `
+                <div class="verdict-box" style="margin-top: 12px; background: rgba(255,255,255,0.05); border-left-color: rgba(255,255,255,0.2);">
+                    <h4 style="color: rgba(255,255,255,0.6); font-size: 11px; text-transform: uppercase;">Why this suggestion?</h4>
+                    <p style="font-size: 13px; color: rgba(255,255,255,0.8);">${data.why_suggestion}</p>
+                </div>
+                ` : ''}
             `;
         }
         else if (type === 'chat') {
@@ -243,9 +289,36 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `;
         }
-        else {
-            // image_analysis or fallback
-            html = `<p>Received data successfully. ${JSON.stringify(data)}</p>`;
+        else if (type === 'image_analysis') {
+            html = `
+                <div class="response-section">
+                    <h3 class="response-title"><i class="ph ph-camera"></i> Image Analysis</h3>
+                    <p style="font-size: 16px; font-weight: 600; color: var(--accent-glow); margin-bottom: 12px;">Detected: ${data.detected_dish || 'Unknown Item'}</p>
+                    
+                    <div class="data-grid">
+                        <div class="data-card">
+                            <div class="data-card-label">Est. Calories</div>
+                            <div class="data-card-value">${data.estimated_nutrition?.calories || 'N/A'}</div>
+                        </div>
+                        <div class="data-card">
+                            <div class="data-card-label">Health Score</div>
+                            <div class="data-card-value" style="color:var(--accent-blue)">${data.health_score || '?'}/10</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="verdict-box">
+                    <h4><i class="ph ph-info"></i> Recommendation</h4>
+                    <p style="margin-top: 8px;">${data.recommendation}</p>
+                </div>
+
+                ${data.why_suggestion ? `
+                <div class="verdict-box" style="margin-top: 12px; background: rgba(255,255,255,0.05); border-left-color: rgba(255,255,255,0.2);">
+                    <h4 style="color: rgba(255,255,255,0.6); font-size: 11px; text-transform: uppercase;">Why this suggestion?</h4>
+                    <p style="font-size: 13px; color: rgba(255,255,255,0.8);">${data.why_suggestion}</p>
+                </div>
+                ` : ''}
+            `;
         }
 
         return html;

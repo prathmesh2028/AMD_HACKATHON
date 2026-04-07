@@ -1,5 +1,6 @@
 const { getRecentLogs } = require('./foodService');
 const { inferHungerLevel, inferEnergyLevel, getHourGap } = require('../utils/timeUtils');
+const { getNextBestAction, getBehaviorInsights, calculateHealthScore } = require('./intelligenceEngine');
 
 /**
  * Builds the runtime context for the Prompt Engine
@@ -31,15 +32,24 @@ const buildContext = async (userId, userProfile = {}) => {
         energy: inferEnergyLevel(gapInHours, time)
     };
 
-    return {
+    const recentFoodsList = recentLogs.map(l => l.food);
+    
+    const contextObject = {
         profile: userProfile,
         time,
         last_meal: lastMeal || 'No logs yet',
         gap_hours: gapInHours,
-        recent_foods: recentLogs.map(l => l.food),
+        recent_foods: recentFoodsList,
         history_summary: historySummary,
         liveState
     };
+    
+    // Attach lightweight additions
+    contextObject.next_best_action = getNextBestAction(contextObject);
+    contextObject.insights = getBehaviorInsights(recentFoodsList);
+    contextObject.health_score = calculateHealthScore(recentFoodsList, gapInHours);
+
+    return contextObject;
 };
 
 module.exports = { buildContext };

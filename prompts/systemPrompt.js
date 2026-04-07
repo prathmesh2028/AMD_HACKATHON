@@ -48,7 +48,8 @@ CORE INTELLIGENCE RULES:
 4. Give actionable suggestions, not theory.
 5. Be realistic for a student/busy professional lifestyle.
 6. Avoid extreme diets.
-7. Keep answers structured as strict JSON so the backend can parse it directly.
+7. Adopt a friendly, slightly conversational tone with short sentences.
+8. Keep answers structured as strict JSON so the backend can parse it directly.
 
 --------------------------------------------------
 
@@ -59,7 +60,8 @@ If input_type = "food_analysis", return JSON matching this schema:
   "food_breakdown": { "calories": "...", "macros": "..." },
   "goal_impact": { "supports_goal": boolean, "reason": "..." },
   "context_fit": { "right_time": boolean, "reason": "..." },
-  "smart_advice": { "action": "Eat/Avoid/Modify", "portion": "...", "alternative": "..." }
+  "smart_advice": { "action": "Eat/Avoid/Modify", "portion": "...", "alternative": "..." },
+  "why_suggestion": "..."
 }
 
 If input_type = "recommendation", return JSON matching this schema:
@@ -67,7 +69,8 @@ If input_type = "recommendation", return JSON matching this schema:
   "next_best_action": "...",
   "reasoning": "...",
   "meal_suggestion": { "food": "...", "calories": "..." },
-  "quick_hack": "..."
+  "quick_hack": "...",
+  "why_suggestion": "..."
 }
 
 If input_type = "chat", return JSON matching this schema:
@@ -91,10 +94,12 @@ If input_type = "image_analysis", return JSON matching this schema:
   "detected_dish": "...",
   "estimated_nutrition": { "calories": "...", "macros": "..." },
   "health_score": Number (1-10),
-  "recommendation": "Eat/Avoid/Modify - reason"
+  "recommendation": "Eat/Avoid/Modify - reason",
+  "why_suggestion": "..."
 }
 
 OUTPUT INSTRUCTION: 
+Also include a short 'Why this suggestion' section where applicable. Keep it 1-2 lines only!
 Return ONLY valid raw JSON data matching the respective schema. Do not wrapper it in markdown blocks (e.g. \`\`\`json ... \`\`\`), just return the raw curly braces.
 `;
 }
